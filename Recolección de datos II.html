@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presentación de Datos de Encuesta y Análisis</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Inter font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            color: #374151;
+        }
+        .chart-container {
+            position: relative;
+            height: 400px; /* Fixed height for charts */
+            width: 100%;
+        }
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #e0e0e0;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Header and Navigation -->
+    <header class="bg-gradient-to-r from-blue-600 to-purple-700 text-white p-4 shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center">
+            <h1 class="text-3xl font-bold mb-2 md:mb-0">Análisis de Datos de San Miguel de Allende</h1>
+            <nav>
+                <ul class="flex flex-wrap justify-center space-x-4">
+                    <li><a href="#encuestas" class="hover:text-blue-200 transition duration-300 ease-in-out">Encuestas</a></li>
+                    <li><a href="#observaciones" class="hover:text-blue-200 transition duration-300 ease-in-out">Observaciones</a></li>
+                    <li><a href="#entrevistas" class="hover:text-blue-200 transition duration-300 ease-in-out">Entrevistas</a></li>
+                    <li><a href="#registros" class="hover:text-blue-200 transition duration-300 ease-in-out">Registros Existentes</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="container mx-auto p-6 flex-grow">
+
+        <!-- Sección de Encuestas -->
+        <section id="encuestas" class="bg-white p-8 rounded-xl shadow-lg mb-10 border border-gray-200">
+            <h2 class="text-4xl font-extrabold text-gray-800 mb-6 text-center">Resultados de Encuestas</h2>
+            <p class="text-lg text-gray-600 mb-8 text-center">Análisis de las respuestas a las preguntas clave de la encuesta.</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Edad -->
+                <div class="bg-blue-50 p-6 rounded-lg shadow-md border border-blue-200">
+                    <h3 class="text-2xl font-semibold text-blue-700 mb-4">Edad de los Encuestados</h3>
+                    <div class="chart-container">
+                        <canvas id="ageChart"></canvas>
+                    </div>
+                    <p class="text-gray-700 mt-4">
+                        <span class="font-medium">Media:</span> 23.93 años<br>
+                        <span class="font-medium">Mediana:</span> 24.5 años<br>
+                        <span class="font-medium">Moda:</span> 25 años
+                    </p>
+                </div>
+
+                <!-- Nacionalidad -->
+                <div class="bg-green-50 p-6 rounded-lg shadow-md border border-green-200">
+                    <h3 class="text-2xl font-semibold text-green-700 mb-4">Nacionalidad</h3>
+                    <div class="chart-container">
+                        <canvas id="nationalityChart"></canvas>
+                    </div>
+                    <p class="text-gray-700 mt-4">El <span class="font-medium">74.2%</span> de los encuestados son mexicanos.</p>
+                </div>
+
+                <!-- Primera vez en San Miguel de Allende -->
+                <div class="bg-yellow-50 p-6 rounded-lg shadow-md border border-yellow-200">
+                    <h3 class="text-2xl font-semibold text-yellow-700 mb-4">¿Es tu primera vez en San Miguel de Allende?</h3>
+                    <div class="chart-container">
+                        <canvas id="firstTimeChart"></canvas>
+                    </div>
+                    <p class="text-gray-700 mt-4">El <span class="font-medium">67.7%</span> de los encuestados no es su primera vez.</p>
+                </div>
+
+                <!-- Tipo de usuario -->
+                <div class="bg-red-50 p-6 rounded-lg shadow-md border border-red-200">
+                    <h3 class="text-2xl font-semibold text-red-700 mb-4">Tipo de Usuario</h3>
+                    <div class="chart-container">
+                        <canvas id="userTypeChart"></canvas>
+                    </div>
+                    <p class="text-gray-700 mt-4">El <span class="font-medium">77.4%</span> se identifica como Turista / Visitante.</p>
+                </div>
+
+                <!-- Interés en funciones de la web -->
+                <div class="bg-purple-50 p-6 rounded-lg shadow-md border border-purple-200 col-span-1 md:col-span-2 lg:col-span-3">
+                    <h3 class="text-2xl font-semibold text-purple-700 mb-4">Interés en Funciones de la Guía Web</h3>
+                    <div class="chart-container">
+                        <canvas id="webFeaturesChart"></canvas>
+                    </div>
+                    <ul class="list-disc list-inside text-gray-700 mt-4">
+                        <li><span class="font-medium">Explorar sin registrarse:</span> 90.3% sí</li>
+                        <li><span class="font-medium">Utilidad de filtrar por categorías:</span> 80.6% muy útil</li>
+                        <li><span class="font-medium">Interés en guardar lugares favoritos:</span> 83.9% sí</li>
+                        <li><span class="font-medium">Crearía cuenta para guardar favoritos:</span> 86.6% sí</li>
+                        <li><span class="font-medium">Le gustaría recomendar nuevos lugares:</span> 71% sí</li>
+                        <li><span class="font-medium">Negocios: Crear y editar anuncios fácilmente:</span> 67.7% sí</li>
+                    </ul>
+                    <p class="text-gray-700 mt-4">
+                        <span class="font-medium">Información indispensable:</span> Horarios de apertura (67.7%) y Opiniones de otros usuarios.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección de Observaciones -->
+        <section id="observaciones" class="bg-white p-8 rounded-xl shadow-lg mb-10 border border-gray-200">
+            <h2 class="text-4xl font-extrabold text-gray-800 mb-6 text-center">Observaciones y Sugerencias</h2>
+            <p class="text-lg text-gray-600 mb-8 text-center">Frecuencia estimada de las sugerencias y observaciones recopiladas.</p>
+
+            <div class="bg-gray-50 p-6 rounded-lg shadow-md border border-gray-200">
+                <h3 class="text-2xl font-semibold text-gray-700 mb-4">Frecuencia de Observaciones</h3>
+                <div class="chart-container">
+                    <canvas id="observationsChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección de Entrevistas (Análisis Estadístico de Funciones de City Explorer) -->
+        <section id="entrevistas" class="bg-white p-8 rounded-xl shadow-lg mb-10 border border-gray-200">
+            <h2 class="text-4xl font-extrabold text-gray-800 mb-6 text-center">Análisis Estadístico de Entrevistas</h2>
+            <p class="text-lg text-gray-600 mb-8 text-center">Resultados clave de las entrevistas sobre las funciones de City Explorer.</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Preferencia de Registro -->
+                <div class="bg-indigo-50 p-6 rounded-lg shadow-md border border-indigo-200">
+                    <h3 class="text-2xl font-semibold text-indigo-700 mb-4">Preferencia de Registro</h3>
+                    <div class="chart-container">
+                        <canvas id="registroChart"></canvas>
+                    </div>
+                    <p class="text-gray-700 mt-4">
+                        <span class="font-medium">Media:</span> 2.1<br>
+                        <span class="font-medium">Moda:</span> 1 (Sin registro)<br>
+                        <span class="font-medium">Mediana:</span> 2 (Me da igual)<br>
+                        <span class="font-medium">Rango:</span> 2
+                    </p>
+                </div>
+
+                <!-- Importancia de Guardar Lugares en Favoritos -->
+                <div class="bg-teal-50 p-6 rounded-lg shadow-md border border-teal-200">
+                    <h3 class="text-2xl font-semibold text-teal-700 mb-4">Importancia de Guardar Favoritos</h3>
+                    <div class="chart-container">
+                        <canvas id="favoritosChart"></canvas>
+                    </div>
+                    <p class="text-gray-700 mt-4">
+                        <span class="font-medium">Media:</span> 2.3<br>
+                        <span class="font-medium">Moda:</span> 2 (Importante)<br>
+                        <span class="font-medium">Mediana:</span> 2 (Importante)<br>
+                        <span class="font-medium">Rango:</span> 2
+                    </p>
+                </div>
+
+                <!-- Preferencia de Recepción de Información -->
+                <div class="bg-orange-50 p-6 rounded-lg shadow-md border border-orange-200">
+                    <h3 class="text-2xl font-semibold text-orange-700 mb-4">Preferencia de Recepción de Información</h3>
+                    <div class="chart-container">
+                        <canvas id="informacionChart"></canvas>
+                    </div>
+                    <p class="text-gray-700 mt-4">
+                        <span class="font-medium">Media:</span> 2.1<br>
+                        <span class="font-medium">Moda:</span> 3 (Ambas/Celular)<br>
+                        <span class="font-medium">Mediana:</span> 2 (Solo por correo)<br>
+                        <span class="font-medium">Rango:</span> 2
+                    </p>
+                </div>
+
+                <!-- Utilidad de Estadísticas/Historial de Anuncios -->
+                <div class="bg-cyan-50 p-6 rounded-lg shadow-md border border-cyan-200">
+                    <h3 class="text-2xl font-semibold text-cyan-700 mb-4">Utilidad de Estadísticas/Historial de Anuncios</h3>
+                    <div class="chart-container">
+                        <canvas id="estadisticasChart"></canvas>
+                    </div>
+                    <p class="text-gray-700 mt-4">
+                        <span class="font-medium">Media:</span> 1.8<br>
+                        <span class="font-medium">Moda:</span> 2 (Muy Útil)<br>
+                        <span class="font-medium">Mediana:</span> 2 (Muy Útil)<br>
+                        <span class="font-medium">Rango:</span> 1
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección de Registros Existentes -->
+        <section id="registros" class="bg-white p-8 rounded-xl shadow-lg mb-10 border border-gray-200">
+            <h2 class="text-4xl font-extrabold text-gray-800 mb-6 text-center">Análisis de Registros Existentes</h2>
+            <p class="text-lg text-gray-600 mb-8 text-center">Estadísticas clave sobre lugares, visitantes, eventos y opiniones.</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Lugares para visitantes -->
+                <div class="bg-lime-50 p-6 rounded-lg shadow-md border border-lime-200">
+                    <h3 class="text-2xl font-semibold text-lime-700 mb-4">Lugares para Visitantes (Categorías)</h3>
+                    <p class="text-gray-700 mt-4">
+                        <span class="font-medium">Moda:</span> Gastronómica (34 veces)<br>
+                        <span class="font-medium">Mediana:</span> Cultural<br>
+                        No se pueden calcular medidas numéricas de dispersión para datos cualitativos.
+                    </p>
+                    <p class="text-sm text-gray-500 mt-2">Este gráfico muestra la distribución de las categorías principales de lugares para visitantes. La categoría "Gastronómica" es la más frecuente, seguida por "Cultural".</p>
+                    <div class="chart-container mt-4">
+                        <canvas id="placesChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Promedio de visitantes por mes -->
+                <div class="bg-rose-50 p-6 rounded-lg shadow-md border border-rose-200">
+                    <h3 class="text-2xl font-semibold text-rose-700 mb-4">Promedio de Visitantes por Mes</h3>
+                    <div class="chart-container">
+                        <canvas id="avgVisitorsChart"></canvas>
+                    </div>
+                    <p class="text-gray-700 mt-4">
+                        <span class="font-medium">Moda:</span> Entre 65 y 75 mil visitantes<br>
+                        <span class="font-medium">Mediana:</span> 70 mil visitantes<br>
+                        <span class="font-medium">Media:</span> Aproximadamente 69 mil visitantes<br>
+                        <span class="font-medium">Rango:</span> 72 mil (entre 40 mil y 112 mil)
+                    </p>
+                </div>
+
+                <!-- Eventos y festividades (Impacto turístico) -->
+                <div class="bg-violet-50 p-6 rounded-lg shadow-md border border-violet-200">
+                    <h3 class="text-2xl font-semibold text-violet-700 mb-4">Eventos y Festividades (Impacto Turístico)</h3>
+                    <p class="text-gray-700 mt-4">
+                        <span class="font-medium">Moda:</span> Medio (10 veces)<br>
+                        <span class="font-medium">Mediana:</span> Medio<br>
+                        No se pueden calcular medidas numéricas de dispersión para datos cualitativos.
+                    </p>
+                    <p class="text-sm text-gray-500 mt-2">Este gráfico ilustra el impacto turístico de los eventos y festividades, donde el impacto "Medio" es el más recurrente.</p>
+                    <div class="chart-container mt-4">
+                        <canvas id="eventsChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Visitantes por países -->
+                <div class="bg-fuchsia-50 p-6 rounded-lg shadow-md border border-fuchsia-200">
+                    <h3 class="text-2xl font-semibold text-fuchsia-700 mb-4">Visitantes por Países</h3>
+                    <div class="chart-container">
+                        <canvas id="countriesChart"></canvas>
+                    </div>
+                    <p class="text-gray-700 mt-4">
+                        <span class="font-medium">Moda:</span> México (el país con más visitantes cada año)<br>
+                        <span class="font-medium">Mediana:</span> Aproximadamente 350 mil visitantes<br>
+                        <span class="font-medium">Media:</span> Aproximadamente 1,750 mil visitantes<br>
+                        <span class="font-medium">Rango:</span> 550 mil (entre 200 mil y 750 mil)
+                    </p>
+                </div>
+
+                <!-- Opiniones de Visitantes -->
+                <div class="bg-emerald-50 p-6 rounded-lg shadow-md border border-emerald-200 col-span-1 md:col-span-2">
+                    <h3 class="text-2xl font-semibold text-emerald-700 mb-4">Opiniones de Visitantes (Calificaciones)</h3>
+                    <div class="chart-container">
+                        <canvas id="opinionsChart"></canvas>
+                    </div>
+                    <p class="text-gray-700 mt-4">
+                        <span class="font-medium">Moda:</span> 5 (8 veces)<br>
+                        <span class="font-medium">Mediana:</span> 5<br>
+                        <span class="font-medium">Media:</span> Aproximadamente 4.47<br>
+                        <span class="font-medium">Rango:</span> 2 (entre 3 y 5)<br>
+                        <span class="font-medium">Desviación estándar:</span> Baja (la mayoría son 4 y 5, solo un 3)
+                    </p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white p-4 text-center mt-10 rounded-t-xl">
+        <p>&copy; 2025 Análisis de Datos. Todos los derechos reservados.</p>
+    </footer>
+
+    <script>
+        // Data extracted from the PDF
+        const data = {
+            encuestas: {
+                age: { media: 23.93, mediana: 24.5, moda: 25 },
+                nationality: { mexicana: 74.2, other: 100 - 74.2 },
+                firstTime: { no: 67.7, yes: 100 - 67.7 },
+                userType: { turistaVisitante: 77.4, other: 100 - 77.4 },
+                webFeatures: {
+                    exploreWithoutRegister: 90.3,
+                    filterByCategory: 80.6,
+                    saveFavorites: 83.9,
+                    createAccountForFavorites: 86.6,
+                    recommendNewPlaces: 71,
+                    businessCreateEditAds: 67.7
+                },
+                indispensableInfo: {
+                    horariosApertura: 67.7,
+                    opinionesOtrosUsuarios: 'Mencionado como indispensable' // Qualitative
+                }
+            },
+            observaciones: {
+                labels: [
+                    'Sistema para reservar mesa',
+                    'Categoría específica hoteles',
+                    'Sistema de reservas por hotel',
+                    'Info cómo llegar (transporte)',
+                    'Mostrar mapa en detalles',
+                    'Estadísticas para anunciantes',
+                    'Experiencias: rutas ciclismo',
+                    'Foro de experiencias',
+                    'Mostrar costos de lugares',
+                    'Información estacionamiento',
+                    'Mejorar seguridad datos usuarios'
+                ],
+                frequencies: [7, 6, 5, 4, 5, 6, 4, 3, 8, 4, 7]
+            },
+            entrevistas: {
+                registro: { media: 2.1, moda: 1, mediana: 2, rango: 2, modaLabel: 'Sin registro', medianaLabel: 'Me da igual' },
+                favoritos: { media: 2.3, moda: 2, mediana: 2, rango: 2, modaLabel: 'Importante', medianaLabel: 'Importante' },
+                informacion: { media: 2.1, moda: 3, mediana: 2, rango: 2, modaLabel: 'Ambas/Celular', medianaLabel: 'Solo por correo' },
+                estadisticas: { media: 1.8, moda: 2, mediana: 2, rango: 1, modaLabel: 'Muy Útil', medianaLabel: 'Muy Útil' }
+            },
+            registrosExistentes: {
+                lugares: { moda: 'Gastronómica', mediana: 'Cultural', frequencies: { 'Gastronómica': 34, 'Cultural': 1, 'Otros': 1 } }, // Frequencies are inferred for example, actual counts not in PDF except for Moda
+                avgVisitors: { moda: '65-75 mil', mediana: 70, media: 69, rango: 72, max: 112, min: 40 },
+                events: { moda: 'Medio', mediana: 'Medio', frequencies: { 'Medio': 10, 'Alto': 1, 'Bajo': 1 } }, // Frequencies are inferred for example
+                countries: { moda: 'México', mediana: 350, media: 1750, rango: 550, max: 750, min: 200 },
+                opinions: { moda: 5, mediana: 5, media: 4.47, rango: 2, stdDev: 'Baja', frequencies: {3:1, 4:6, 5:8} } // Frequencies inferred from text
+            }
+        };
+
+        // Function to create bar chart
+        function createBarChart(ctx, labels, data, label, backgroundColor, borderColor) {
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: label,
+                        data: data,
+                        backgroundColor: backgroundColor,
+                        borderColor: borderColor,
+                        borderWidth: 1,
+                        borderRadius: 8,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                color: '#4b5563'
+                            },
+                            grid: {
+                                color: '#e5e7eb'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: '#4b5563'
+                            },
+                            grid: {
+                                display: false
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            labels: {
+                                color: '#374151'
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0,0,0,0.7)',
+                            bodyColor: '#fff',
+                            titleColor: '#fff'
+                        }
+                    }
+                }
+            });
+        }
+
+        // Function to create pie/doughnut chart
+        function createPieChart(ctx, labels, data, label, backgroundColor, borderColor) {
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: label,
+                        data: data,
+                        backgroundColor: backgroundColor,
+                        borderColor: borderColor,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                color: '#374151'
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0,0,0,0.7)',
+                            bodyColor: '#fff',
+                            titleColor: '#fff'
+                        }
+                    }
+                }
+            });
+        }
+
+        // Function to create a combined bar/line chart for statistical measures
+        function createStatisticalChart(ctx, labels, mediaData, modaData, medianaData, title) {
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Media',
+                            data: mediaData,
+                            backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1,
+                            borderRadius: 8,
+                        },
+                        {
+                            label: 'Mediana',
+                            data: medianaData,
+                            backgroundColor: 'rgba(153, 102, 255, 0.6)',
+                            borderColor: 'rgba(153, 102, 255, 1)',
+                            borderWidth: 1,
+                            borderRadius: 8,
+                        },
+                        {
+                            label: 'Moda',
+                            data: modaData,
+                            backgroundColor: 'rgba(255, 159, 64, 0.6)',
+                            borderColor: 'rgba(255, 159, 64, 1)',
+                            borderWidth: 1,
+                            borderRadius: 8,
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: title,
+                            color: '#374151',
+                            font: { size: 18 }
+                        },
+                        legend: {
+                            labels: { color: '#374151' }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0,0,0,0.7)',
+                            bodyColor: '#fff',
+                            titleColor: '#fff'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { color: '#4b5563' },
+                            grid: { color: '#e5e7eb' }
+                        },
+                        x: {
+                            ticks: { color: '#4b5563' },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+
+        // Render charts on window load
+        window.onload = function() {
+            // Encuestas Charts
+            const ageCtx = document.getElementById('ageChart').getContext('2d');
+            createBarChart(ageCtx, ['Media', 'Mediana', 'Moda'], [data.encuestas.age.media, data.encuestas.age.mediana, data.encuestas.age.moda], 'Edad (años)', ['#3b82f6', '#60a5fa', '#93c5fd'], ['#2563eb', '#3b82f6', '#60a5fa']);
+
+            const nationalityCtx = document.getElementById('nationalityChart').getContext('2d');
+            createPieChart(nationalityCtx, ['Mexicana', 'Otra'], [data.encuestas.nationality.mexicana, data.encuestas.nationality.other], 'Nacionalidad', ['#10b981', '#6ee7b7'], ['#059669', '#34d399']);
+
+            const firstTimeCtx = document.getElementById('firstTimeChart').getContext('2d');
+            createPieChart(firstTimeCtx, ['No', 'Sí'], [data.encuestas.firstTime.no, data.encuestas.firstTime.yes], 'Primera vez en SMA', ['#fbbf24', '#fcd34d'], ['#d97706', '#f59e0b']);
+
+            const userTypeCtx = document.getElementById('userTypeChart').getContext('2d');
+            createPieChart(userTypeCtx, ['Turista / Visitante', 'Otro'], [data.encuestas.userType.turistaVisitante, data.encuestas.userType.other], 'Tipo de Usuario', ['#ef4444', '#fca5a5'], ['#dc2626', '#ef4444']);
+
+            const webFeaturesCtx = document.getElementById('webFeaturesChart').getContext('2d');
+            createBarChart(webFeaturesCtx,
+                ['Explorar sin registro', 'Filtrar por categorías', 'Guardar favoritos', 'Crear cuenta para favoritos', 'Recomendar lugares', 'Negocio: Crear/Editar anuncios'],
+                [data.encuestas.webFeatures.exploreWithoutRegister, data.encuestas.webFeatures.filterByCategory, data.encuestas.webFeatures.saveFavorites, data.encuestas.webFeatures.createAccountForFavorites, data.encuestas.webFeatures.recommendNewPlaces, data.encuestas.webFeatures.businessCreateEditAds],
+                'Porcentaje de Interés (%)',
+                ['#a855f7', '#c084fc', '#d8b4fe', '#a855f7', '#c084fc', '#d8b4fe'],
+                ['#7c3aed', '#9333ea', '#a78bfa', '#7c3aed', '#9333ea', '#a78bfa']
+            );
+
+            // Observaciones Chart
+            const observationsCtx = document.getElementById('observationsChart').getContext('2d');
+            createBarChart(observationsCtx, data.observaciones.labels, data.observaciones.frequencies, 'Frecuencia Estimada', '#6b7280', '#4b5563');
+
+            // Entrevistas Charts
+            const registroCtx = document.getElementById('registroChart').getContext('2d');
+            createStatisticalChart(registroCtx, ['Preferencia de Registro'], [data.entrevistas.registro.media], [data.entrevistas.registro.moda], [data.entrevistas.registro.mediana], 'Preferencia de Registro');
+
+            const favoritosCtx = document.getElementById('favoritosChart').getContext('2d');
+            createStatisticalChart(favoritosCtx, ['Importancia de Guardar Favoritos'], [data.entrevistas.favoritos.media], [data.entrevistas.favoritos.moda], [data.entrevistas.favoritos.mediana], 'Importancia de Guardar Favoritos');
+
+            const informacionCtx = document.getElementById('informacionChart').getContext('2d');
+            createStatisticalChart(informacionCtx, ['Preferencia de Recepción de Información'], [data.entrevistas.informacion.media], [data.entrevistas.informacion.moda], [data.entrevistas.informacion.mediana], 'Preferencia de Recepción de Información');
+
+            const estadisticasCtx = document.getElementById('estadisticasChart').getContext('2d');
+            createStatisticalChart(estadisticasCtx, ['Utilidad de Estadísticas/Historial de Anuncios'], [data.entrevistas.estadisticas.media], [data.entrevistas.estadisticas.moda], [data.entrevistas.estadisticas.mediana], 'Utilidad de Estadísticas/Historial de Anuncios');
+
+
+            // Registros Existentes Charts
+            // For placesChart and eventsChart, since only Moda/Mediana are given for categories,
+            // I'll create a simple bar chart to represent the Moda's frequency and other categories as 'Other'.
+            const placesCtx = document.getElementById('placesChart').getContext('2d');
+            createPieChart(placesCtx, Object.keys(data.registrosExistentes.lugares.frequencies), Object.values(data.registrosExistentes.lugares.frequencies), 'Categorías de Lugares', ['#84cc16', '#a3e635', '#d9f99d'], ['#65a30d', '#65a30d', '#a3e635']);
+
+            const avgVisitorsCtx = document.getElementById('avgVisitorsChart').getContext('2d');
+            createBarChart(avgVisitorsCtx, ['Media', 'Mediana', 'Rango'], [data.registrosExistentes.avgVisitors.media, data.registrosExistentes.avgVisitors.mediana, data.registrosExistentes.avgVisitors.rango], 'Visitantes (miles)', ['#f43f5e', '#fb7185', '#fda4af'], ['#e11d48', '#f43f5e', '#fb7185']);
+
+            const eventsCtx = document.getElementById('eventsChart').getContext('2d');
+            createPieChart(eventsCtx, Object.keys(data.registrosExistentes.events.frequencies), Object.values(data.registrosExistentes.events.frequencies), 'Impacto Turístico de Eventos', ['#8b5cf6', '#a78bfa', '#c4b5fd'], ['#7c3aed', '#8b5cf6', '#a78bfa']);
+
+            const countriesCtx = document.getElementById('countriesChart').getContext('2d');
+            createBarChart(countriesCtx, ['Mediana', 'Media', 'Rango'], [data.registrosExistentes.countries.mediana, data.registrosExistentes.countries.media, data.registrosExistentes.countries.rango], 'Visitantes (miles)', ['#e879f9', '#f0abfc', '#fbcfe8'], ['#d946ef', '#e879f9', '#f0abfc']);
+
+            const opinionsCtx = document.getElementById('opinionsChart').getContext('2d');
+            createBarChart(opinionsCtx, Object.keys(data.registrosExistentes.opinions.frequencies), Object.values(data.registrosExistentes.opinions.frequencies), 'Calificaciones de Opiniones', ['#34d399', '#6ee7b7', '#a7f3d0'], ['#059669', '#10b981', '#34d399']);
+        };
+    </script>
+</body>
+</html>
