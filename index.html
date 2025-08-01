@@ -8,6 +8,17 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- MathJax for LaTeX rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
     <!-- Inter font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
@@ -37,6 +48,15 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #555;
         }
+        .probability-formula {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 8px 12px;
+            margin: 4px 0;
+            font-family: 'Courier New', monospace;
+            color: #1e293b;
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -51,6 +71,7 @@
                     <li><a href="#observaciones" class="hover:text-blue-200 transition duration-300 ease-in-out">Observaciones</a></li>
                     <li><a href="#entrevistas" class="hover:text-blue-200 transition duration-300 ease-in-out">Entrevistas</a></li>
                     <li><a href="#registros" class="hover:text-blue-200 transition duration-300 ease-in-out">Registros Existentes</a></li>
+                    <li><a href="#probabilidades" class="hover:text-blue-200 transition duration-300 ease-in-out">Probabilidades</a></li>
                 </ul>
             </nav>
         </div>
@@ -282,6 +303,31 @@
             </div>
         </section>
 
+        <!-- Nueva Sección de Análisis de Probabilidades -->
+        <section id="probabilidades" class="bg-white p-8 rounded-xl shadow-lg mb-10 border border-gray-200">
+            <h2 class="text-4xl font-extrabold text-gray-800 mb-6 text-center">Análisis de Probabilidades</h2>
+            <p class="text-lg text-gray-600 mb-8 text-center">
+                Cálculo de probabilidades basándose en los datos proporcionados, distinguiendo entre Probabilidad Clásica, Probabilidad Frecuentista y Probabilidad Subjetiva.
+            </p>
+
+            <!-- Probabilidad Clásica -->
+            <div class="bg-blue-50 p-6 rounded-lg shadow-md border border-blue-200 mb-6">
+                <h3 class="text-2xl font-semibold text-blue-700 mb-4">1. Probabilidad Clásica (a priori)</h3>
+                <p class="text-gray-700 mb-4">
+                    La probabilidad clásica se calcula cuando todos los resultados posibles son igualmente probables. Se basa en la proporción de resultados favorables respecto al total de resultados posibles. El siguiente gráfico muestra estas probabilidades.
+                </p>
+                <div class="chart-container mt-4">
+                    <canvas id="clasicaChart"></canvas>
+                </div>
+                <ul class="list-disc list-inside text-gray-700 space-y-3 mt-4">
+                    <li>
+                        <span class="font-medium">Disposición a escalar como anunciante:</span>
+                        La probabilidad subjetiva se basa en la rentabilidad y el retorno de inversión (ROI) que los anunciantes perciben.
+                    </li>
+                </ul>
+            </div>
+        </section>
+
     </main>
 
     <!-- Footer -->
@@ -338,6 +384,29 @@
                 events: { moda: 'Medio', mediana: 'Medio', frequencies: { 'Medio': 10, 'Alto': 1, 'Bajo': 1 } }, // Frequencies are inferred for example
                 countries: { moda: 'México', mediana: 350, media: 1750, rango: 550, max: 750, min: 200 },
                 opinions: { moda: 5, mediana: 5, media: 4.47, rango: 2, stdDev: 'Baja', frequencies: {3:1, 4:6, 5:8} } // Frequencies inferred from text
+            },
+            probabilidades: {
+                clasica: {
+                    labels: [
+                        'Turista/Visitante', 'Explorar sin registro', 'Filtrar por categorías',
+                        'Horarios indispensable', 'Guardar favoritos', 'Crear cuenta',
+                        'Negocio: crear anuncios'
+                    ],
+                    data: [77.4, 90.3, 80.6, 67.7, 83.9, 86.6, 67.7]
+                },
+                frecuentista: {
+                    observaciones: {
+                        labels: [
+                             'Mostrar costos', 'Sistema p/ reservar', 'Mejorar seguridad',
+                             'Hoteles/Estadísticas', 'Otros'
+                        ],
+                        data: [8, 7, 7, 6, 31],
+                    },
+                    opiniones: {
+                        labels: ['5 estrellas', '4 estrellas', '3 estrellas'],
+                        data: [8, 6, 1]
+                    }
+                }
             }
         };
 
@@ -556,7 +625,132 @@
 
             const opinionsCtx = document.getElementById('opinionsChart').getContext('2d');
             createBarChart(opinionsCtx, Object.keys(data.registrosExistentes.opinions.frequencies), Object.values(data.registrosExistentes.opinions.frequencies), 'Calificaciones de Opiniones', ['#34d399', '#6ee7b7', '#a7f3d0'], ['#059669', '#10b981', '#34d399']);
+        
+            // Probabilidades Charts
+            const clasicaCtx = document.getElementById('clasicaChart').getContext('2d');
+            createBarChart(clasicaCtx, data.probabilidades.clasica.labels, data.probabilidades.clasica.data, 'Porcentaje de Probabilidad (%)', ['#2563eb', '#3b82f6', '#60a5fa', '#93c5fd', '#bfdbfe', '#dbeafe', '#eff6ff'], ['#1d4ed8', '#2563eb', '#3b82f6', '#60a5fa', '#93c5fd', '#bfdbfe', '#dbeafe']);
+            
+            const frecuentistaObservacionesCtx = document.getElementById('frecuentistaObservacionesChart').getContext('2d');
+            createBarChart(frecuentistaObservacionesCtx, data.probabilidades.frecuentista.observaciones.labels, data.probabilidades.frecuentista.observaciones.data, 'Frecuencia de Sugerencias', ['#10b981', '#34d399', '#6ee7b7', '#a7f3d0', '#d1fae5'], ['#059669', '#10b981', '#34d399', '#6ee7b7', '#a7f3d0']);
+
+            const frecuentistaOpinionesCtx = document.getElementById('frecuentistaOpinionesChart').getContext('2d');
+            createPieChart(frecuentistaOpinionesCtx, data.probabilidades.frecuentista.opiniones.labels, data.probabilidades.frecuentista.opiniones.data, 'Frecuencia de Calificaciones', ['#ef4444', '#f97316', '#fbbf24'], ['#dc2626', '#ea580c', '#f59e0b']);
         };
     </script>
 </body>
-</html>
+</html>Probabilidad de que un usuario sea Turista/Visitante:</span>
+                        <div class="probability-formula">P(Usuario sea Turista/Visitante) = 77.4%</div>
+                    </li>
+                    <li>
+                        <span class="font-medium">Probabilidad de que un usuario prefiera explorar sin registrarse:</span>
+                        <div class="probability-formula">P(Explorar sin registrarse) = 90.3%</div>
+                    </li>
+                    <li>
+                        <span class="font-medium">Probabilidad de que un usuario considere "Muy útil" poder filtrar por categorías:</span>
+                        <div class="probability-formula">P(Filtrar por categorías "Muy útil") = 80.6%</div>
+                    </li>
+                    <li>
+                        <span class="font-medium">Probabilidad de que un usuario considere los horarios de apertura como información indispensable:</span>
+                        <div class="probability-formula">P(Horarios de apertura indispensable) = 67.7%</div>
+                    </li>
+                    <li>
+                        <span class="font-medium">Probabilidad de que a un usuario le interese guardar lugares favoritos:</span>
+                        <div class="probability-formula">P(Interés en guardar favoritos) = 83.9%</div>
+                    </li>
+                    <li>
+                        <span class="font-medium">Probabilidad de que un usuario crearía una cuenta para guardar favoritos (si es necesario):</span>
+                        <div class="probability-formula">P(Crear cuenta para guardar favoritos) = 86.6%</div>
+                    </li>
+                    <li>
+                        <span class="font-medium">Probabilidad de que un usuario de negocio desee crear y editar anuncios fácilmente:</span>
+                        <div class="probability-formula">P(Negocio desee crear/editar anuncios fácilmente) = 67.7%</div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Probabilidad Frecuentista -->
+            <div class="bg-green-50 p-6 rounded-lg shadow-md border border-green-200 mb-6">
+                <h3 class="text-2xl font-semibold text-green-700 mb-4">2. Probabilidad Frecuentista (empírica)</h3>
+                <p class="text-gray-700 mb-4">
+                    Esta probabilidad se basa en la frecuencia relativa de un evento observado en una muestra grande o un conjunto de datos históricos. A continuación, se muestran los gráficos que representan estas frecuencias.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-gray-50 p-4 rounded-lg shadow-sm border border-gray-200">
+                        <h4 class="text-xl font-semibold text-gray-700 mb-4">Frecuencia de Sugerencias Adicionales</h4>
+                        <div class="chart-container">
+                            <canvas id="frecuentistaObservacionesChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg shadow-sm border border-gray-200">
+                        <h4 class="text-xl font-semibold text-gray-700 mb-4">Frecuencia de Calificaciones de Visitantes</h4>
+                        <div class="chart-container">
+                            <canvas id="frecuentistaOpinionesChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <ul class="list-disc list-inside text-gray-700 space-y-2 mt-6">
+                    <li>
+                        <span class="font-medium">Basado en las "Observaciones" (sugerencias de funciones adicionales):</span>
+                        <ul class="list-circle list-inside ml-6 mt-2 space-y-1">
+                            <li>Total de frecuencias: 59</li>
+                            <li>
+                                <div class="probability-formula">P(Sugerencia sea "Mostrar los costos de los lugares") = 8/59 ≈ 13.56%</div>
+                            </li>
+                            <li>
+                                <div class="probability-formula">P(Sugerencia sea "Sistema para reservar mesa") = 7/59 ≈ 11.86%</div>
+                            </li>
+                            <li>
+                                <div class="probability-formula">P(Sugerencia sea "Mejorar seguridad de los datos de los usuarios") = 7/59 ≈ 11.86%</div>
+                            </li>
+                            <li>
+                                <div class="probability-formula">P(Sugerencia sea "Categoría específica para hoteles..." o "Estadísticas para anunciantes") = 6/59 ≈ 10.17%</div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="mt-4">
+                        <span class="font-medium">Basado en las "Opiniones de Visitantes" (calificaciones):</span>
+                        <ul class="list-circle list-inside ml-6 mt-2 space-y-1">
+                            <li>Total de calificaciones: 15</li>
+                            <li>
+                                <div class="probability-formula">P(Una calificación aleatoria sea de 5 estrellas) = 8/15 ≈ 53.33%</div>
+                            </li>
+                            <li>
+                                <div class="probability-formula">P(Una calificación aleatoria sea de 4 estrellas) = 6/15 ≈ 40%</div>
+                            </li>
+                            <li>
+                                <div class="probability-formula">P(Una calificación aleatoria sea de 3 estrellas) = 1/15 ≈ 6.67%</div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Probabilidad Subjetiva -->
+            <div class="bg-purple-50 p-6 rounded-lg shadow-md border border-purple-200">
+                <h3 class="text-2xl font-semibold text-purple-700 mb-4">3. Probabilidad Subjetiva</h3>
+                <p class="text-gray-700 mb-4">
+                    La probabilidad subjetiva se utiliza cuando no hay datos suficientes y se basa en juicios de expertos o percepciones, a menudo derivados de consensos cualitativos. No se puede graficar ya que no se basa en datos numéricos.
+                </p>
+                <ul class="list-disc list-inside text-gray-700 space-y-2">
+                    <li>
+                        <span class="font-medium">Utilidad de ver fotos, direcciones y detalles antes de visitar:</span>
+                        Existe un consenso universal, lo que implica una probabilidad subjetiva muy alta de que los usuarios la consideren valiosa.
+                    </li>
+                    <li>
+                        <span class="font-medium">Deseo de dejar comentarios o sugerencias de nuevos lugares:</span>
+                        Se observa un fuerte consenso afirmativo, por lo que la probabilidad subjetiva es muy alta.
+                    </li>
+                    <li>
+                        <span class="font-medium">Promoción de negocios en Internet:</span>
+                        Hay un consenso universal de que los negocios ya promocionan o promocionarían su presencia en internet, lo que sugiere una probabilidad subjetiva muy alta de que estén interesados en usar una plataforma.
+                    </li>
+                    <li>
+                        <span class="font-medium">Control total para crear, editar y pagar anuncios:</span>
+                        Existe un fuerte consenso positivo sobre esta característica. La probabilidad subjetiva de que los anunciantes valoren esta conveniencia es alta.
+                    </li>
+                    <li>
+                        <span class="font-medium">Facilidad del proceso para anunciantes:</span>
+                        Hay un consenso universal en que el proceso debe ser lo más sencillo, fácil, intuitivo y didáctico posible. Esto implica una probabilidad subjetiva muy alta de que los anunciantes adopten la plataforma si cumple con estos criterios.
+                    </li>
+                    <li>
+                        <span class="font-medium">
